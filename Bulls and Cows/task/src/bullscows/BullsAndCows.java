@@ -1,6 +1,6 @@
 package bullscows;
 
-import java.util.Arrays;
+import java.util.stream.Stream;
 
 /**
  * Created with IntelliJ IDEA.
@@ -10,46 +10,49 @@ import java.util.Arrays;
  * Time: 16:30
  */
 public class BullsAndCows {
-    private final SecretNumber secretNumber;
+    private final SecretCode secretCode;
     private boolean isGameOver = false;
 
-    public BullsAndCows(int size) throws
-                                  NumberSizeException {
-        this.secretNumber = new SecretNumber(size);
+    public BullsAndCows(int size,
+                        int possibleSymbol) throws
+                                            NumberSizeException {
+        this.secretCode = new SecretCode(size,
+                                         possibleSymbol);
     }
 
-    public BullsAndCows(SecretNumber secretNumber) {
-        this.secretNumber = secretNumber;
+    public BullsAndCows(SecretCode secretCode) {
+        this.secretCode = secretCode;
     }
 
     public boolean isGameOver() {
         return isGameOver;
     }
 
-    public void play(int number) {
-        String stringNumber = String.valueOf(number);
-
-        String[] arrayNumber = stringNumber.split("");
+    public void play(String code) {
+        char[] codeArray = code.toCharArray();
 
         int cowsCount = 0;
         int bullsCount = 0;
-        int[] secretDigits = secretNumber.getDigits();
+        char[] secretCodeArray = secretCode.getSymbols();
 
-        for (int i = 0; i < arrayNumber.length; i++) {
-            int currentDigit = Integer.parseInt(arrayNumber[i]);
+        for (int i = 0; i < codeArray.length; i++) {
+            char currentChar = codeArray[i];
 
-            if (currentDigit == secretDigits[i]) {
+            if (currentChar == secretCodeArray[i]) {
                 bullsCount++;
-            } else if (Arrays.stream(secretDigits).anyMatch(value -> value == currentDigit)) {
-                cowsCount++;
+            } else {
+                Stream<Character> secretCodeStream = new String(secretCodeArray).chars().mapToObj(value -> (char) value);
+
+                if (secretCodeStream.anyMatch(value -> value == currentChar)) {
+                    cowsCount++;
+                }
             }
         }
-
 
         printResult(bullsCount,
                     cowsCount);
 
-        if (bullsCount == secretNumber.getDigits().length) {
+        if (bullsCount == secretCode.getSymbols().length) {
             this.isGameOver = true;
             System.out.println("Congratulations! You guessed the secret code.");
         }

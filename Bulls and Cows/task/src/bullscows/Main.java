@@ -4,11 +4,20 @@ import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
-        System.out.println("Please, enter the secret code's length:");
 
         try {
             Scanner scanner = new Scanner(System.in);
-            SecretNumber secretNumber = new SecretNumber(scanner.nextInt());
+            System.out.println("Input the length of the secret code:");
+            int codeLength = scanner.nextInt();
+
+            System.out.println("Input the number of possible symbols in the code:");
+            int possibleSymbols = scanner.nextInt();
+
+            SecretCode secretNumber = new SecretCode(codeLength,
+                                                     possibleSymbols);
+
+            System.out.println(secretNumber.getCode());
+
             System.out.println("Okay, let's start a game!");
             BullsAndCows game = new BullsAndCows(secretNumber);
 
@@ -16,7 +25,7 @@ public class Main {
             while (true) {
                 System.out.printf("Turn %d:\n",
                                   turnCount);
-                game.play(scanner.nextInt());
+                game.play(scanner.next());
                 turnCount++;
 
                 if (game.isGameOver()) {
