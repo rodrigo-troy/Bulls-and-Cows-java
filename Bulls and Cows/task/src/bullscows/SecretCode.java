@@ -36,7 +36,7 @@ public class SecretCode {
             baseSymbol[i - 97 + 10] = Character.toString(i).charAt(0);
         }
 
-        System.out.println(baseSymbol);
+        //System.out.println(baseSymbol);
 
         int numberIndex = 0;
         while (numberIndex != symbols.length) {

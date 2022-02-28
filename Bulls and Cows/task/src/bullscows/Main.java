@@ -8,13 +8,43 @@ public class Main {
         try {
             Scanner scanner = new Scanner(System.in);
             System.out.println("Input the length of the secret code:");
-            int codeLength = scanner.nextInt();
+            String codeLength = scanner.next();
+
+            if (!isNumeric(codeLength)) {
+                System.out.printf("Error: \"%s\" isn't a valid number.",
+                                  codeLength);
+                return;
+            }
 
             System.out.println("Input the number of possible symbols in the code:");
-            int possibleSymbols = scanner.nextInt();
+            String possibleSymbols = scanner.next();
 
-            SecretCode secretNumber = new SecretCode(codeLength,
-                                                     possibleSymbols);
+            if (!isNumeric(possibleSymbols)) {
+                System.out.printf("Error: \"%s\" isn't a valid number.\n",
+                                  possibleSymbols);
+                return;
+            }
+
+            if (Integer.parseInt(codeLength) > Integer.parseInt(possibleSymbols)) {
+                System.out.printf("Error: it's not possible to generate a code with a length of %s with %s unique symbols.\n",
+                                  codeLength,
+                                  possibleSymbols);
+                return;
+            }
+
+            if (Integer.parseInt(codeLength) < 1) {
+                System.out.printf("Error: it's not possible to generate a code with a length of %s.\n",
+                                  codeLength);
+                return;
+            }
+
+            if (Integer.parseInt(possibleSymbols) > 36) {
+                System.out.println("Error: maximum number of possible symbols in the code is 36 (0-9, a-z).");
+                return;
+            }
+
+            SecretCode secretNumber = new SecretCode(Integer.parseInt(codeLength),
+                                                     Integer.parseInt(possibleSymbols));
 
             System.out.println(secretNumber.getCode());
 
@@ -35,27 +65,9 @@ public class Main {
         } catch (NumberSizeException e) {
             System.out.println(e.getMessage());
         }
+    }
 
-        //System.out.println(secretNumber.getNumber());
-
-        /*
-        System.out.println("The secret code is prepared: ****");
-        System.out.println("The secret code is prepared: ****");
-
-        BullsAndCows game = new BullsAndCows(secretNumber);
-        game.play(scanner.nextInt());
-
-
-        System.out.println("\nTurn 1. Answer:");
-        System.out.println(1234);
-        game.play(1234);
-        System.out.println("\nTurn 2. Answer:");
-        System.out.println(2418);
-        game.play(2418);
-        System.out.println("\nTurn 3. Answer:");
-        System.out.println(secretNumber.getNumber());
-        game.play(secretNumber.getNumber());
-*/
-
+    private static boolean isNumeric(String codeLength) {
+        return codeLength.chars().allMatch(Character::isDigit);
     }
 }
